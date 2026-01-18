@@ -28,7 +28,8 @@ import ninLogo from "./assets/nin2.png";
 
 import topLogoPng from "./assets/toplogo.png";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001";
+
 const HISTORY_KEY = "search_history_v1";
 const HISTORY_LIMIT = 8;
 
