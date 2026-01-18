@@ -118,7 +118,7 @@ export default function App() {
     return null;
   };
 
-  const pickCover = (it, index) => {
+  const pickCover = (it) => it.image_url || "";
     const title = (it.game_title || "").toLowerCase();
 
     if (title === "split fiction") return index % 2 === 0 ? split1 : split2;
@@ -226,7 +226,8 @@ export default function App() {
             return (
               <div className="card" key={it.id}>
                 <div className="imgWrap">
-                  <img className="img" src={pickCover(it, idx)} alt={it.game_title} />
+                  <img className="img" src={pickCover(it)} alt={it.game_title} />
+
 
                   <div className="badge">
                     <span className="badgeIcon">+</span>
