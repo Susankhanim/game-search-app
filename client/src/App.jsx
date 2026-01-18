@@ -110,43 +110,12 @@ export default function App() {
     }
   };
 
-  // ✅ only these 3 platforms
-  const logoByType = (type) => {
-    if (type === "steam") return steamLogo;
-    if (type === "xbox") return xboxLogo;
-    return ninLogo; // nintendo
-  };
-
-  const labelByType = (type) => {
-    if (type === "steam") return "Steam";
-    if (type === "xbox") return "Xbox";
-    return "Nintendo";
-  };
-
-  // ✅ MIXED platform rules (uses index so it alternates)
-  const pickPlatformType = (it, index) => {
-    const t = String(it?.game_title || "").toLowerCase();
-
-    if (t.includes("split fiction")) {
-      
-      return index % 3 === 0 ? "steam" : index % 3 === 1 ? "xbox" : "nintendo";
-    }
-
-    if (t.includes("fifa 23")) {
-      
-      return index % 2 === 0 ? "xbox" : "steam";
-    }
-
-    if (t.includes("red dead redemption 2")) {
-      return "xbox";
-    }
-
-    if (t.includes("call of duty")) {
-      
-      return index % 2 === 0 ? "xbox" : "steam";
-    }
-
-    return "steam";
+  const pickPlatformLogo = (platform) => {
+    const p = String(platform || "").toLowerCase();
+    if (p.includes("steam")) return steamLogo;
+    if (p.includes("xbox")) return xboxLogo;
+    if (p.includes("nin") || p.includes("nintendo") || p.includes("switch")) return ninLogo;
+    return null;
   };
 
   const pickCover = (it, index) => {
@@ -234,7 +203,6 @@ export default function App() {
             <div className="lang">
               <img className="flagImg" src={ltFlag} alt="Lithuania" />
               <span>English EU | EUR</span>
-              
             </div>
 
             <button className="miniBtn" aria-label="Favorites" type="button">
@@ -253,9 +221,7 @@ export default function App() {
 
         <div className="grid">
           {items.map((it, idx) => {
-            const pType = pickPlatformType(it, idx);
-            const pLogo = logoByType(pType);
-            const pLabel = labelByType(pType);
+            const pLogo = pickPlatformLogo(it.platform);
 
             return (
               <div className="card" key={it.id}>
@@ -268,15 +234,15 @@ export default function App() {
                   </div>
 
                   <div className="platformBar">
-                    <img className="platformLogo" src={pLogo} alt="" aria-hidden="true" />
-                    <span className="platformText">{pLabel}</span>
+                    {pLogo ? (
+                      <img className="platformLogo" src={pLogo} alt="" aria-hidden="true" />
+                    ) : null}
+                    <span className="platformText">{it.platform}</span>
                   </div>
                 </div>
 
                 <div className="cardBody">
-                  <div className="cardTitle">
-                    {it.game_title} {pLabel ? `${pLabel} Key (PC)` : ""}
-                  </div>
+                  <div className="cardTitle">{it.game_title}</div>
 
                   <div className="cardRegion">{it.region}</div>
 
@@ -287,13 +253,12 @@ export default function App() {
 
                   <div className="cardPriceRow">
                     <div className="bigPrice">€{Number(it.price).toFixed(2)}</div>
-                     <img className="langTimeIcon" src={clockIcon} alt="" aria-hidden="true" />
+                    <img className="langTimeIcon" src={clockIcon} alt="" aria-hidden="true" />
                   </div>
 
                   <div className="cashRow">
                     <span className="cashLabel">Cashback:</span>
                     <span className="cashValue">€{Number(it.cashback || 0).toFixed(2)}</span>
-                    
                   </div>
 
                   <div className="likeRow">
