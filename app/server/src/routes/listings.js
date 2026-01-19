@@ -13,11 +13,11 @@ router.get("/list", (req, res) => {
       return res.json({ total: items.length, items });
     }
 
+    // Get candidates from LIKE search
     const candidates = Listing.search(search);
-    const base =
-      candidates.length > 0 ? candidates : Listing.getAll();
 
-    const ranked = base
+    // Only process LIKE matches, don't fall back to all items
+    const ranked = candidates
       .map((it) => {
         const titleScore = levenshtein(it.game_title, search);
         const platformScore = levenshtein(it.platform, search);
